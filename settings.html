@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings - Zeus Banger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      font-family: 'Pixelify Sans', sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: radial-gradient(circle, #0f0c29, #302b63, #24243e);
+      background-size: 400% 400%;
+      animation: cyberBg 30s ease infinite;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00f9ff;
+      user-select: none;
+    }
+
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background:
+        linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,204,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: gridMove 60s linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    body::after {
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 2px,
+          transparent 3px,
+          transparent 4px
+        );
+    }
+
+    @keyframes cyberBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 60px 60px, 60px 60px; }
+    }
+
+    .ui-container {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 50px;
+      border: 3px solid #00f9ff;
+      border-radius: 20px;
+      box-shadow:
+        0 0 40px #ff00cc,
+        0 0 60px #00f9ff inset,
+        0 0 6px #00f9ff,
+        0 0 12px #ff00cc inset;
+      text-align: center;
+      animation: floaty 5s ease-in-out infinite;
+      position: relative;
+      z-index: 5;
+    }
+
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    input {
+      font-size: 1.4em;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #1a1a1a;
+      color: #00f9ff;
+      box-shadow: 0 0 10px #00f9ff inset, 0 0 15px #ff00cc;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    button {
+      font-size: 1.5em;
+      padding: 20px 40px;
+      background: linear-gradient(45deg, #ff00cc, #00f9ff);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff00cc, 0 0 30px #00f9ff;
+      transition: transform 0.2s, box-shadow 0.3s;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(2px, -2px); }
+      40% { transform: translate(-2px, 2px); }
+      60% { transform: translate(1px, 1px); }
+      80% { transform: translate(-1px, -1px); }
+      100% { transform: translate(0); }
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 30px;
+      color: #fff;
+      text-shadow: 0 0 15px #00f9ff, 0 0 25px #ff00cc;
+      animation: neonPulse 2s infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { text-shadow: 0 0 15px #00f9ff, 0 0 30px #ff00cc; }
+      50% { text-shadow: 0 0 30px #ff00cc, 0 0 60px #00f9ff; }
+    }
+
+    .status, .current-value {
+      margin-top: 20px;
+      color: #ccc;
+      font-size: 1.2em;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      color: #00f9ff;
+      font-size: 1.2em;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 2px solid #00f9ff;
+      box-shadow: 0 0 10px #00f9ff;
+      transition: all 0.3s ease;
+    }
+
+    .back-button a:hover {
+      background: #00f9ff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="back-button">
+    <a href="index.html">🏠 Back to Main 🏠</a>
+  </div>
+
+  <div class="ui-container">
+    <h1>⚙️ Settings ⚙️</h1>
+    <input type="number" id="baseInput" placeholder="Base Value (e.g. 50000)" />
+    <br />
+    <button onclick="saveSettings()">💾 Save 💾</button>
+    <div class="status" id="statusMessage"></div>
+    <div class="current-value" id="currentValueDisplay"></div>
+  </div>
+
+  <script>
+    function saveSettings() {
+      const base = parseFloat(document.getElementById('baseInput').value || "0");
+      if (!base) {
+        document.getElementById('statusMessage').innerText = "❗ Please enter a valid base value.";
+        return;
+      }
+
+      localStorage.setItem("zeus_base", JSON.stringify(base));
+      document.getElementById('statusMessage').innerText = `📁 Saved base = ${base}`;
+      updateCurrentValueDisplay(base);
+    }
+
+    function updateCurrentValueDisplay(base) {
+      document.getElementById('currentValueDisplay').innerText = `📁 Current saved base: ${base}`;
+    }
+
+    window.onload = () => {
+      const stored = localStorage.getItem("zeus_base");
+      if (stored) {
+        const base = JSON.parse(stored);
+        document.getElementById('baseInput').value = base;
+        updateCurrentValueDisplay(base);
+      } else {
+        document.getElementById('currentValueDisplay').innerText = "❗ No base value saved yet.";
+      }
+    };
+  </script>
+</body>
+</html>
