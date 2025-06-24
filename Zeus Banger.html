@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zeus Banger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Pixelify Sans', 'Noto Sans KR', sans-serif;
+      background: radial-gradient(circle, #0f0c29, #302b63, #24243e);
+      background-size: 400% 400%;
+      animation: cyberBg 30s ease infinite;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00f9ff;
+      user-select: none; /* 텍스트 드래그 안 되게 */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    /* 배경 움직이는 그리드 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,204,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      animation: gridMove 60s linear infinite;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+
+    /* CRT 스캔라인 오버레이 */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 2px,
+          transparent 3px,
+          transparent 4px
+        );
+      z-index: 2;
+    }
+
+    @keyframes cyberBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes gridMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 60px 60px, 60px 60px; }
+    }
+
+    .ui-container {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 50px;
+      border: 3px solid #00f9ff;
+      border-radius: 20px;
+      box-shadow:
+        0 0 40px #ff00cc,
+        0 0 60px #00f9ff inset,
+        0 0 6px #00f9ff,
+        0 0 12px #ff00cc inset;
+      text-align: center;
+      animation: floaty 5s ease-in-out infinite;
+      position: relative;
+      z-index: 5;
+    }
+
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 30px;
+      color: #fff;
+      text-shadow: 0 0 15px #00f9ff, 0 0 25px #ff00cc;
+      animation: neonPulse 2s infinite;
+      user-select: none;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { text-shadow: 0 0 15px #00f9ff, 0 0 30px #ff00cc; }
+      50% { text-shadow: 0 0 30px #ff00cc, 0 0 60px #00f9ff; }
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1.5em;
+      padding: 20px 40px;
+      margin-top: 20px;
+      background: linear-gradient(45deg, #ff00cc, #00f9ff);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff00cc, 0 0 30px #00f9ff;
+      transition: transform 0.2s, box-shadow 0.3s;
+      animation: glitch 2s infinite;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 6;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px #ff00cc, 0 0 60px #00f9ff;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(2px, -2px); }
+      40% { transform: translate(-2px, 2px); }
+      60% { transform: translate(1px, 1px); }
+      80% { transform: translate(-1px, -1px); }
+      100% { transform: translate(0); }
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.8em;
+      color: #fff;
+      text-shadow: 0 0 10px #00f9ff, 0 0 20px #ff00cc;
+      animation: resultGlow 1.5s ease-in-out infinite alternate, flicker 2.5s linear infinite;
+      user-select: none;
+      min-height: 70px;
+      line-height: 1.4;
+      position: relative;
+      z-index: 6;
+    }
+
+    @keyframes resultGlow {
+      from { opacity: 0.7; }
+      to { opacity: 1; }
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ui-container" aria-label="Cyberpunk pixel style random percent calculator">
+    <h1>⚡ Zeus Banger ⚡</h1>
+    <button onclick="calculateAndCopy()">💰 Bang 💰</button>
+    <div id="result" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script>
+    const base = 50000; // 원하는 기본값
+
+    function calculateAndCopy() {
+      const steps = [];
+      for (let i = 1; i <= 20; i += 0.5) {
+        steps.push(+i.toFixed(1));
+      }
+      const randomPercent = steps[Math.floor(Math.random() * steps.length)];
+      const result = +(base * (randomPercent / 100)).toFixed(2);
+
+      navigator.clipboard.writeText(result).then(() => {
+        const resDiv = document.getElementById('result');
+        resDiv.innerHTML =
+          `📊 Base Value: ${base}<br>🎲 Random Percent: ${randomPercent}%<br>📋 Copied Result: <strong>${result}</strong>`;
+      }).catch(() => {
+        document.getElementById('result').innerText = '❌ Failed to copy to clipboard';
+      });
+    }
+  </script>
+</body>
+</html>
